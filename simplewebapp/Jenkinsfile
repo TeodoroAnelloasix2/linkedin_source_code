@@ -9,7 +9,7 @@ pipeline {
    stages {
         stage('Build Image'){
             steps{
-                sh 'ls; docker build -t italianodev/simplewebapp:$BUILD_NUMBER simplewebapp'
+                sh 'ls; docker build -t $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER simplewebapp'
             }
         }
         stage('Login Dockerhub'){
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Push image'){
             steps{
-                sh 'docker push italianodev/simplewebapp:$BUILD_NUMBER'
+                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER'
             }
         }
         stage('Deploy image'){
@@ -38,10 +38,10 @@ pipeline {
                                 allowAnyHosts: true
                             ],
                             command: """ 
-                                docker pull italianodev/simplewebapp:$BUILD_NUMBER && \
+                                docker pull $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER && \
                                 docker stop simplewebapp || true && \
                                 docker rm simplewebapp || true && \
-                                docker run --name simplewebapp -p 80:8085 -d --restart unless-stopped  italianodev/simplewebapp:$BUILD_NUMBER
+                                docker run --name simplewebapp -p 80:8085 -d --restart unless-stopped  $DOCKERHUB_CREDENTIALS_USR/simplewebapp:$BUILD_NUMBER
                                     """ 
                             ])
                         }
