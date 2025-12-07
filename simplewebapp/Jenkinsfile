@@ -6,7 +6,7 @@ pipeline {
    stages {
         stage('Build Image'){
             steps{
-                sh 'docker build -t italianodev/simplewebapp:$BUILD_NUMBER simplewebapp/Dockerfile '
+                sh 'pwd; ls; docker build -t italianodev/simplewebapp:$BUILD_NUMBER .'
             }
         }
         stage('Login Dockerhub'){
