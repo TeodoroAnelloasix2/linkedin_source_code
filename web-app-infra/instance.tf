@@ -20,6 +20,10 @@ resource "aws_instance" "webserver" {
   subnet_id                   = aws_subnet.wa1_public_sbnt.id
   key_name                    = var.webappkey.name
   user_data                   = file(var.ec2server.init_script)
+  provisioner "local-exec" {
+    when = create
+    command = "echo ${self.public_ip} > webserverip"
+  }
   tags = {
     Name = var.ec2server.name
   }
