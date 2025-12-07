@@ -32,7 +32,7 @@ pipeline {
                             name: 'webserver',
                             host: EC2_IP,
                             user: 'ec2-user',
-                            identityFile: 'webappkey.pem',
+                            identityFile: './webappkey.pem',
                             allowAnyHosts: true
                         ],
                         command: """ 
