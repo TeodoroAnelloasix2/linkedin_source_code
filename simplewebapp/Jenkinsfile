@@ -25,8 +25,9 @@ pipeline {
         stage('Deploy image'){
             steps{
                 withCredentials([sshUserPrivateKey(credentialsId: 'webappkey',keyFileVariable: 'PEM', usernameVariable: 'USER')]){
+                       script{
                         dir('/var/jenkins_home/workspace/Deploy-web-app-infra/web-app-infra'){
-                            steps{
+                            
                                 def EC2_IP = readFile('webserverip').trim()
                             sshCommand([
                                 remote: [
@@ -41,12 +42,14 @@ pipeline {
                                 docker rm simplewebapp || true && \
                                 docker run --name simplewebapp -p 80:8085 -d --restart unless-stopped  italianodev/simplewebapp:$BUILD_NUMBER
                                     """ 
-                        ])
+                            ])
+                        }
                     }
-                    }
+                        
                 }
             }
         }
+        
    }
    post {
     always {
