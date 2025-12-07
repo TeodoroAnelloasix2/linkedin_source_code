@@ -2,6 +2,9 @@ pipeline {
    agent {label 'master'}
    environment {
     DOCKERHUB_CREDENTIALS=credentials('dockerhub_cred')
+    AWS_ACCESS_KEY_ID  = credentials('access_key_id')
+    AWS_SECRET_ACCESS_KEY = credentials('secret_key')
+    AWS_REGION = 'us-east-1'
    }
    stages {
         stage('Build Image'){
@@ -17,6 +20,31 @@ pipeline {
         stage('Push image'){
             steps{
                 sh 'docker push italianodev/simplewebapp:$BUILD_NUMBER'
+            }
+        }
+        stage('Deploy image'){
+            steps{
+                withCredentials([sshUserPrivateKey(credentialsId: 'webappkey',keyFileVariable: 'PEM', usernameVariable: 'USER')]){
+                        dir('/var/jenkins_home/workspace/Web-app-infra/web-app-infra'){
+                            def EC2_IP = readFile('webserverip').trim()
+                            sshCommand([
+                                remote: [
+                                host: EC2_IP,
+                                user: USER,
+                                identityFile: PEM,
+                                allowAnyHosts: true
+                            ],
+                            command: """ 
+                                docker pull italianodev/simplewebapp:$BUILD_NUMBER && \
+                                docker stop simplewebapp || true && \
+                                docker rm simplewebapp || true && \
+                                docker run --name simplewebapp -p 80:8085 -d --restart unless-stopped  italianodev/simplewebapp:$BUILD_NUMBER
+                                    """ 
+                        ])
+                    }
+                
+                }
+                
             }
         }
    }
