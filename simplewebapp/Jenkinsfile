@@ -25,8 +25,9 @@ pipeline {
         stage('Deploy image'){
             steps{
                 withCredentials([sshUserPrivateKey(credentialsId: 'webappkey',keyFileVariable: 'PEM', usernameVariable: 'USER')]){
-                        dir('/var/jenkins_home/workspace/Web-app-infra/web-app-infra'){
-                            def EC2_IP = readFile('webserverip').trim()
+                        dir('/var/jenkins_home/workspace/Deploy-web-app-infra/web-app-infra'){
+                            steps{
+                                def EC2_IP = readFile('webserverip').trim()
                             sshCommand([
                                 remote: [
                                 host: EC2_IP,
@@ -42,9 +43,8 @@ pipeline {
                                     """ 
                         ])
                     }
-                
+                    }
                 }
-                
             }
         }
    }
