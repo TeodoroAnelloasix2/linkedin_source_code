@@ -53,6 +53,16 @@ pipeline {
                 sh "pwd;cd web-app-infra/ ; terraform apply -input=false infra1"
             }
         }
+        // stage('Destroy') {
+        //     steps {
+        //          sh '''
+        //          sleep 10
+        //          cd web-app-infra
+        //          MY_IP=$(curl -s ifconfig.me)/32
+        //          terraform destroy -var "my_ip=$MY_IP" -auto-approve
+        //          '''
+        //     }
+        // }
 
     }
     post{
