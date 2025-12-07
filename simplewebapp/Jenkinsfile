@@ -30,8 +30,8 @@ pipeline {
                             
                                 def EC2_IP = readFile('webserverip').trim()
                             sshCommand([
-                                name: 'webserver'
                                 remote: [
+                                name: 'webserver',
                                 host: EC2_IP,
                                 user: USER,
                                 identityFile: PEM,
