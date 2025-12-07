@@ -32,7 +32,7 @@ pipeline {
                             name: 'webserver',
                             host: EC2_IP,
                             user: 'ec2-user',
-                            identityFile: './webappkey.pem',
+                            identityFile: '/var/jenkins_home/workspace/Deploy-web-app-infra/web-app-infra/webappkey.pem',
                             allowAnyHosts: true
                         ],
                         command: """ 
