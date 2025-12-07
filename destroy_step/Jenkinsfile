@@ -1,0 +1,17 @@
+pipeline {
+    agent {label 'master'}
+    stages{
+        stage('Destroy'){
+            steps{
+                dir('/var/jenkins_home/workspace/Web-app-infra/web-app-infra'){
+                sh '''
+                    terraform init
+                    sleep 2
+                    MY_IP=$(curl -s ifconfig.me)/32
+                    terraform destroy -var "my_ip=$MY_IP" -auto-approve
+                '''
+                }
+            }
+        }
+    }
+}
