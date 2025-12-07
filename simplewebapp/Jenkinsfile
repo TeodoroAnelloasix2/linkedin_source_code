@@ -15,7 +15,9 @@ pipeline {
             }
         }
         stage('Push image'){
-            sh 'docker push italianodev/simplewebapp:$BUILD_NUMBER'
+            steps{
+                sh 'docker push italianodev/simplewebapp:$BUILD_NUMBER'
+            }
         }
    }
    post {
