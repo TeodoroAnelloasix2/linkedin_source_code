@@ -31,7 +31,7 @@ pipeline {
                             remote: [
                             name: 'webserver',
                             host: EC2_IP,
-                            user: USER,
+                            user: 'ec2-user',
                             identityFile: 'webappkey.pem',
                             allowAnyHosts: true
                         ],
