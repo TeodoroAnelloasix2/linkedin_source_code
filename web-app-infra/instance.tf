@@ -28,3 +28,6 @@ resource "aws_instance" "webserver" {
     Name = var.ec2server.name
   }
 }
+output "webip" {
+  value = aws_instance.webserver.public_ip
+}
